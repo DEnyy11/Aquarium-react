@@ -9,9 +9,9 @@ function App() {
   const [activeTab, setActiveTab] = useState(1);
   const [valid, setValid] = useState(false);
   const [tempAquarium, setTempAquarium] = useState({
-    width: 0,
-    height: 0,
-    depth: 0,
+    width: "",
+    height: "",
+    depth: "",
   });
 
   const handleDelete = (idToDelete) => {
@@ -23,25 +23,17 @@ function App() {
   };
   const handleAquarium = (e) => {
     const source = e.target.name;
-    switch (source) {
-      case "width": {
-        setTempAquarium({ ...tempAquarium, width: e.target.value });
-        break;
-      }
-      case "height": {
-        setTempAquarium({ ...tempAquarium, height: e.target.value });
-        break;
-      }
-      case "depth": {
-        setTempAquarium({ ...tempAquarium, depth: e.target.value });
-        break;
-      }
-      default:
-        break;
-    }
-    validateAquarium();
+    let value = parseInt(e.target.value);
+
+    const newAquarium = {
+      ...tempAquarium,
+      [source]: value,
+    };
+
+    validateAquarium(newAquarium);
+    setTempAquarium(newAquarium);
   };
-  const validateAquarium = (fish) => {
+  const validateAquarium = (aquarium) => {
     let minLiters = 0;
     let aquariumLiters = 0;
     for (let index = 0; index < listOfFishes.length; index++) {
@@ -51,8 +43,7 @@ function App() {
       }
     }
 
-    aquariumLiters =
-      (tempAquarium.depth * tempAquarium.width * tempAquarium.height) / 1000;
+    aquariumLiters = (aquarium.depth * aquarium.width * aquarium.height) / 1000;
 
     if (aquariumLiters < minLiters) {
       setValid(false);
